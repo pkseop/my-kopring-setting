@@ -38,8 +38,16 @@ abstract class RedisValueCommander<T> {
         return listOf(profile, PREFIX).joinToString(":")
     }
 
+    private fun hashKey(): String {
+        return listOf(systemKey(), baseKey()).joinToString(":")
+    }
+
     private fun hashKey(objKey: String?): String {
         return listOf(systemKey(), baseKey(), objKey).joinToString(":")
+    }
+
+    open fun set(obj: T) {
+        valOp.set(hashKey(), obj)
     }
 
     open fun set(objKey: String, obj: T) {
@@ -50,6 +58,10 @@ abstract class RedisValueCommander<T> {
         val key = hashKey(objKey)
         valOp[key] = obj
         redisTemplate.expire(key, ttl, TimeUnit.MILLISECONDS)
+    }
+
+    open fun get(): T? {
+        return valOp.get(hashKey())
     }
 
     open fun get(objKey: String?): T? {

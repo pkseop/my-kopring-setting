@@ -1,6 +1,10 @@
 package my.kopring.setting.config
 
 import biz.gripcloud.api.cache.kryo.KryoRedisSerializer
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import my.kopring.setting.cache.CacheName
 import my.kopring.setting.cache.Jackson2JsonRedisWarnSerializer
 import my.kopring.setting.component.ActiveProfile
@@ -15,6 +19,7 @@ import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
@@ -45,11 +50,20 @@ class RedisConfig(
     @Bean
     fun redisTemplate(): RedisTemplate<String, Any> {
         val redisTemplate = RedisTemplate<String, Any>()
+
+        val objectMapper = ObjectMapper()
+            .findAndRegisterModules()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerModule(JavaTimeModule())
+
+        objectMapper
+            .activateDefaultTyping(objectMapper.polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
+
         redisTemplate.setConnectionFactory(redisConnectionFactory())
         redisTemplate.keySerializer = StringRedisSerializer()
-        redisTemplate.valueSerializer = Jackson2JsonRedisWarnSerializer()
+        redisTemplate.valueSerializer = GenericJackson2JsonRedisSerializer(objectMapper)
         redisTemplate.hashKeySerializer = StringRedisSerializer()
-        redisTemplate.hashValueSerializer = Jackson2JsonRedisWarnSerializer()
+        redisTemplate.hashValueSerializer = GenericJackson2JsonRedisSerializer(objectMapper)
         return redisTemplate
     }
 

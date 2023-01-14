@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss} %t %-5level %logger{36}:%line - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<springProfile name="default">
+		<logger name="my.kopring" level="debug" additivity="false">
+			<appender-ref ref="STDOUT" />
+		</logger>
+	</springProfile>
+	<springProfile name="dev">
+		<logger name="my.kopring" level="debug" additivity="false">
+			<appender-ref ref="STDOUT" />
+		</logger>
+
+		<appender name="stats-ping" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+			<destination>logstash-svc:4560</destination>
+			<!-- encoder is required -->
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+				<customFields>{"indexPrefix":"ping"}</customFields>
+			</encoder>
+		</appender>
+		<appender name="stats-content" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+			<destination>logstash-svc:4560</destination>
+			<!-- encoder is required -->
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+				<customFields>{"indexPrefix":"content"}</customFields>
+			</encoder>
+		</appender>
+
+		<logger name="my.kopring.setting.logger.StatsPingLogger" level="info" additivity="false">
+			<appender-ref ref="stats-ping"/>
+		</logger>
+
+		<logger name="my.kopring.setting.logger.StatsContentLogger" level="info" additivity="false">
+			<appender-ref ref="stats-content"/>
+		</logger>
+
+	</springProfile>
+	<springProfile name="prod">
+		<logger name="my.kopring" level="info" additivity="false">
+			<appender-ref ref="STDOUT" />
+		</logger>
+
+		<appender name="stats-ping" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+			<destination>logstash-svc:4560</destination>
+			<!-- encoder is required -->
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+				<customFields>{"indexPrefix":"ping"}</customFields>
+			</encoder>
+		</appender>
+		<appender name="stats-content" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+			<destination>logstash-svc:4560</destination>
+			<!-- encoder is required -->
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+				<customFields>{"indexPrefix":"content"}</customFields>
+			</encoder>
+		</appender>
+
+		<logger name="my.kopring.setting.logger.StatsPingLogger" level="info" additivity="false">
+			<appender-ref ref="stats-ping"/>
+		</logger>
+
+		<logger name="my.kopring.setting.logger.StatsContentLogger" level="info" additivity="false">
+			<appender-ref ref="stats-content"/>
+		</logger>
+
+	</springProfile>
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

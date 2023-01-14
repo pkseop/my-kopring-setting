@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0, viewport-fit=cover">
+    <title>Template</title>
+    <link th:href="${@tUtil.hashCss('template', 'vendors~collection~discover~player~reservation.bundle')}" rel="stylesheet"/>
+    <script th:src="${@tUtil.js('/js/common/pong')}"></script>
+	<script th:inline="javascript">Pong().register([[${parentDomain}]]);</script>
+    <script th:inline="javascript">
+        var param = {
+            serviceName: [[${serviceName}]],
+            sessionId: [[${sessionId}]],
+            api : "",
+            resource : [[${resourceDomain}]],
+            serviceId :  [[${serviceId}]],
+            config: [[${config}]],
+            [# th:if="${content != null}"]
+            content : {
+                id : [[${content.id}]],
+                playbackUrl: [[${content.playbackUrl}]],
+                title: [[${content.title}]],
+                description: [[${content.description}]],
+                coverUrl: [[${content.coverUrl}]],
+                likeCount: [[${content.likeCount}]],
+                viewCount: [[${content.viewCount}]],
+                owner: [[${content.owner}]],
+                subMedias: [[${content.subMedias}]],
+                type : [[${content.type}]],
+                rehearsal: [[${content.rehearsal}]],
+                publishedTime: [[${content.publishedTime}]],
+            },
+            [/]
+            [# th:if="${content == null}"]
+            content : {
+                title: "Test",
+                type : 0,
+                owner: [[${owner}]]
+            },
+            [/]
+            logoUrl : [[${logoUrl}]],
+            confirmCellular : [[${confirmCellular}]],
+            productCount : [[${productCount}]],
+            parentDomain : [[${parentDomain}]],
+            muted : [[${muted}]],
+            useFClose : [[${fClose}]],
+            useClose : [[${close}]],
+            share : [[${share}]],
+            exNoti : [[${exNoti}]],
+            guest : [[${guest}]],
+            nickname : [[${nickname}]],
+            userHash : [[${userHash}]],
+            useFollow : [[${follow}]],
+            masking : [[${maskingNick}]],
+            followed : [[${followed}]],
+            validateProduct : [[${validateProduct}]],
+            playHighFirst : [[${playHighFirst}]],
+            lang: [[${lang}]],
+            region: [[${region}]],
+            currency: [[${currency}]],
+            hideLogo: [[${hideLogo}]],
+            hideWatermark: [[${hideWatermark}]],
+            protect: [[${protect}]],
+            productsCollect: [[${productsCollect}]],
+            langResourceUrl: [[${langResourceUrl}]]
+            [# th:if="${products != null}"]
+              ,products : [[${products}]]
+            [/]
+            [# th:if="${coupons != null}"]
+              ,coupons : [[${coupons}]]
+            [/]
+            [# th:if="${likeImageInfo != null}"]
+              ,likeImageInfo : [[${likeImageInfo}]]
+            [/]
+            [# th:if="${tipIconList != null}"]
+                ,tipIconList : [[${tipIconList}]]
+            [/]
+        }
+    </script>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script th:inline="javascript">
+        let contentId = '[[${content.id}]]';
+        let userHash = '[[${userHash}]]';
+        let contentType = '[[${content.type}]]';
+        let deviceId = '[[${deviceId}]]';
+    </script>
+
+    <!-- 신버전 대응  -->
+    <script th:src="${@tUtil.hashJs('template', 'vendors~collection~discover~player~reservation.bundle')}"></script>
+    <script th:src="${@tUtil.hashJs('template', 'vendors~collection~discover~player.bundle')}"></script>
+
+    <!-- 구버전 호환용  -->
+    <script th:src="${@tUtil.hashJs('template', 'template')}"></script>
+</body>
+</html>

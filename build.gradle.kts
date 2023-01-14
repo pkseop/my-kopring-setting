@@ -29,6 +29,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -47,6 +48,8 @@ dependencies {
 	implementation("com.google.guava:guava:31.1-jre")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 	implementation("org.apache.poi:poi-ooxml:5.0.0")
+	implementation("net.logstash.logback:logstash-logback-encoder:7.2")
+	implementation("joda-time:joda-time:2.12.0")
 
 
 	implementation("com.querydsl:querydsl-jpa:$qeurydslVersion")

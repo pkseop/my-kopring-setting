@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk "openjdk18"
+        gradle "Gradle-7.5"
+    }
+
+    environment {
+        PATH = "/usr/local/bin:/var/lib/jenkins/bin:$PATH"
+        DEPLOY_VERSION = '1.0.0'
+        REGISTRY_NAME = "{{image host}}"
+        MODULE_NAME = "{{module name}}"
+    }
+
+    stages {
+
+        stage('Gradle build') {
+            steps {
+                sh "gradle clean build"
+            }
+        }
+
+        stage('Build & push image') {
+            steps {
+                sh """
+                    aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${REGISTRY_NAME}
+                    docker build -f ./Dockerfile_dev -t ${MODULE_NAME}:${DEPLOY_VERSION}.${env.BUILD_ID} .
+                    docker tag ${MODULE_NAME}:${DEPLOY_VERSION}.${env.BUILD_ID} ${REGISTRY_NAME}/${MODULE_NAME}:${DEPLOY_VERSION}.${env.BUILD_ID}
+                    docker push ${REGISTRY_NAME}/${MODULE_NAME}:${DEPLOY_VERSION}.${env.BUILD_ID}
+
+                    docker rmi ${MODULE_NAME}:${DEPLOY_VERSION}.${env.BUILD_ID}
+                    docker rmi ${REGISTRY_NAME}/${MODULE_NAME}:${DEPLOY_VERSION}.${env.BUILD_ID}
+
+                    sed -i "s/<TAG>/${DEPLOY_VERSION}.${env.BUILD_ID}/g" deployment_dev.yaml
+                """
+            }
+        }
+
+        stage('Deploy to cluster') {
+            steps {
+                withCredentials([file(credentialsId: 'dev-grip-cloud-kube-config', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f deployment_dev.yaml'
+                }
+            }
+        }
+    }
+}

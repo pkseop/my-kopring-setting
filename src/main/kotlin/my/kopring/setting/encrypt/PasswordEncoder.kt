@@ -1,5 +1,6 @@
 package biz.gripcloud.admin.encrypt
 
+import my.kopring.setting.encrypt.AESCrypto
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.Optional
@@ -18,7 +19,7 @@ object PasswordEncoder {
         }
 
         return try {
-            rawPassword == AESCryptor.decrypt(encodedPassword)
+            rawPassword == AESCrypto.decrypt(encodedPassword)
         } catch (e: Exception){
             false
         }

@@ -50,6 +50,11 @@ dependencies {
 	implementation("org.apache.poi:poi-ooxml:5.0.0")
 	implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 	implementation("joda-time:joda-time:2.12.0")
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation("com.google.code.gson:gson:2.10.1")
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation("org.json:json:20230227")
+
 
 
 	implementation("com.querydsl:querydsl-jpa:$qeurydslVersion")

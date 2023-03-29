@@ -1,4 +1,4 @@
-package my.kopring.batch.utils
+package my.kopring.setting.utils
 
 import com.google.gson.GsonBuilder
 import org.json.JSONException

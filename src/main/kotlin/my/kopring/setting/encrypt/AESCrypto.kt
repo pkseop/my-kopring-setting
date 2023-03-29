@@ -1,4 +1,4 @@
-package biz.gripcloud.admin.encrypt
+package my.kopring.setting.encrypt
 
 import org.apache.commons.codec.binary.Base64
 import java.io.UnsupportedEncodingException
@@ -7,7 +7,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-object AESCryptor {
+object AESCrypto {
 
     private const val CLOUD_KEY = "r7bni384#8!0*fjk"
     private val IV = ByteArray(16)

@@ -55,6 +55,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.json/json
 	implementation("org.json:json:20230227")
 
+	// 금칙어 처리 알고리즘 ahocorasick 라이브러리
+	implementation("org.ahocorasick:ahocorasick:0.6.3")
 
 
 	implementation("com.querydsl:querydsl-jpa:$qeurydslVersion")
